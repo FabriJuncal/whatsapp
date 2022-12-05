@@ -1,0 +1,26 @@
+// Creación del proyecto Laravel 9
+curl -s https://laravel.build/whatsapp | bash
+
+// Descargamos Jetstream:
+sail composer require laravel/jetstream --dev
+
+// Instalamos Jetstream con Livewire:
+sail artisan jetstream:install livewire
+
+// Instalación de dependencias NPM y migración de la Base de Datos
+npm install
+npm run build
+php artisan migrate
+
+
+// Encender el Contenedor de Docker
+sail up
+
+// Ejecutar el servidor de Vite
+npm run dev
+
+// Instalación del Drive Pusher (Proveedor de Servicios API con WebSocket)
+sail composer require pusher/pusher-php-server
+
+// Instalar Librería "Laravel Echo" (Librería para conecarse de manera sencilla a canales WebSocket con Laravel)
+npm install --save-dev laravel-echo pusher-js
