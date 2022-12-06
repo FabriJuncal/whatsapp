@@ -24,3 +24,15 @@ sail composer require pusher/pusher-php-server
 
 // Instalar Librería "Laravel Echo" (Librería para conecarse de manera sencilla a canales WebSocket con Laravel)
 npm install --save-dev laravel-echo pusher-js
+
+// Crea las Migraciones y Modelos correspondientes
+// Con la "-m" indicamos que se creará la migración
+
+sail artisan make:model Contact -m
+sail artisan make:model Chat -m
+sail artisan make:migration create_chat_user_table
+sail artisan make:model Message -m
+sail artisan make:model DeletedMessage -m
+
+// Ejecutamos la migración eliminando las tablas existentes y luego ejecutando los Seeders
+sail artisan migrate:fresh --seed
