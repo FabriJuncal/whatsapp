@@ -58,4 +58,30 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function contact()
+    {
+        // hasMany() => Método que hace la relación de "Uno a Muchos"
+        //  -> Parametro => Modelo con el que se quiere relacionar
+        return $this->hasMany(Contact::class);
+    }
+
+    public function messages(){
+        // hasMany() => Método que hace la relación de "Uno a Muchos"
+        //  -> Parametro => Modelo con el que se quiere relacionar
+        return $this->hasMany(Message::class);
+    }
+
+    // Relación basada en una tabla pivot llamada "chat_user"
+    public function chats()
+    {
+        // belongsToMany() => Método que hace la relación de "Muchos a Muchos"
+        //->withPivot() => Como la relación se basa en una tabla pivot,
+        //                 se debe especificar con el método "withPivot()" aquellos campos que se quieren obtener
+        //                 (Ya que si no se especifica estos, la consulta solo devolverá los ID's que se relacionan)
+        // ->withTimestamps() => Almacena la hora y fecha de la creación y actualización del registro.
+        return $this->belongsToMany(Chat::class)
+                    ->withPivot('color', 'active')
+                    ->withTimestamps();
+    }
 }

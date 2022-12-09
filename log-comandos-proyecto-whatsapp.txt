@@ -36,3 +36,4 @@ sail artisan make:model DeletedMessage -m
 
 // Ejecutamos la migración eliminando las tablas existentes y luego ejecutando los Seeders
 sail artisan migrate:fresh --seed
+
