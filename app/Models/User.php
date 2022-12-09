@@ -59,7 +59,7 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function contact()
+    public function contacts()
     {
         // hasMany() => Método que hace la relación de "Uno a Muchos"
         //  -> Parametro => Modelo con el que se quiere relacionar

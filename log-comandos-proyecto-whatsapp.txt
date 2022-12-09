@@ -37,3 +37,6 @@ sail artisan make:model DeletedMessage -m
 // Ejecutamos la migración eliminando las tablas existentes y luego ejecutando los Seeders
 sail artisan migrate:fresh --seed
 
+// Creamos un controlador y con "-r" le decimos a Laravel que nos cree con todos los métodos para un CRUD
+sail artisan make:controller ContactController -r
+
