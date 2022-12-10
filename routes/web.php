@@ -27,4 +27,4 @@ Route::get('/', function () {
 
 // ->names('contacts') => Se le asigna en plural el nombre de "contacts" a las rutas, es decir empezaran con la palabra "contacts".
 //                        Por ejemplo: contacts.index, contacts.show, etc.
-Route::middleware('auth')->resource('contacts/', ContactController::class)->names('contacts');
+Route::middleware('auth')->resource('contacts', ContactController::class)->names('contacts');

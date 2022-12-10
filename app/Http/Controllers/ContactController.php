@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Contact;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ContactController extends Controller
 {
@@ -37,9 +38,40 @@ class ContactController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    // Almacena un nuevo contacto en la base de datos.
     public function store(Request $request)
     {
-        //
+
+        // Validamos los datos enviados por HTTP desde el formulario
+        $request->validate([
+            'name' => 'required', // Obligatorio
+            'email' => [
+                'required',       // Obligatorio
+                'email',          // Debe tener formato de correo electrónico
+                'exists:users',   // Debe existir en la tabla de usuarios de la base de datos
+                Rule::notIn([auth()->user()->email]) // El correo electrónico no puede ser igual al correo electrónico del usuario autenticado en la aplicación
+            ]
+        ]);
+
+        // Se busca el usuario en la BD con el correo electronico enviado desde el formulario
+        $user = User::where('email', $request->email)->first();
+
+        // Hace un INSERT en la tabla "Contact" con los datos obtenidos de la tabla "User" filtrado por el Correo Electrónico
+        $contact = Contact::create([
+            'name' => $request->name,
+            'user_id' => auth()->id(),
+            'contact_id' => $user->id
+        ]);
+
+        // flash.banner => Es una variable recervada por Jetstream para mostrar el mensaje en un componente
+        session()->flash('flash.banner', 'El contacto se ha creado correctamente');
+
+        // flash.bannerStyle => Es una variable recervada por Jetstream para dar estilo al componente que mostrará el mensaje
+        // Existen dos opciones de estilos "success" y "danger"
+        session()->flash('flash.bannerStyle', 'success');
+
+        // Redirecciona al apartado de edición de contactos
+        return redirect()->route('contacts.edit', $contact);
     }
 
     /**
