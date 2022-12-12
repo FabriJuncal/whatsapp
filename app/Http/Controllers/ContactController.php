@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contact;
 use App\Models\User;
+use App\Rules\InvalidEmail;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -49,7 +50,8 @@ class ContactController extends Controller
                 'required',       // Obligatorio
                 'email',          // Debe tener formato de correo electrónico
                 'exists:users',   // Debe existir en la tabla de usuarios de la base de datos
-                Rule::notIn([auth()->user()->email]) // El correo electrónico no puede ser igual al correo electrónico del usuario autenticado en la aplicación
+                Rule::notIn([auth()->user()->email]), // El correo electrónico no puede ser igual al correo electrónico del usuario autenticado en la aplicación
+                new InvalidEmail  // Regla Personalizada en el archivo: "app\Rules\InvalidEmail.php". Esta Regla valida que el email ingresado no pertenezca ya a un Contacto
             ]
         ]);
 

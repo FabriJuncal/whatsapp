@@ -31,7 +31,7 @@
 
                 <x-jet-input type="email"
                 name="email"
-                value="{{ old('name') }}"
+                value="{{ old('email') }}"
                 class="w-full"
                 placeholder="Ingrese el correo electronico." />
             </div>

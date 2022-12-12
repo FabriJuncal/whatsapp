@@ -40,3 +40,6 @@ sail artisan migrate:fresh --seed
 // Creamos un controlador y con "-r" le decimos a Laravel que nos cree con todos los métodos para un CRUD
 sail artisan make:controller ContactController -r
 
+// Creamos una Regla personalizada para validar el formulario "Contactos"
+sail artisan make:rule InvalidEmail
+
