@@ -8,13 +8,59 @@
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
         <div class="flex justify-end mb-4">
-            <a href="{{ route('contacts.create') }}" class="btn btn-blue">Crear Curso</a>
+            <a href="{{ route('contacts.create') }}" class="btn btn-blue flex">
+                <svg class="w-6 h-6 pr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Agregar Contacto
+            </a>
 
         </div>
 
         {{-- Si el usuario logeado tiene Contactos Mostramos la Lista, Sino mostramos el Alet --}}
         @if ($contacts->count())
-            <p>aquí se mostrará tu lista de contactos</p>
+
+        <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="py-3 px-6">
+                            Nombre
+                        </th>
+                        <th scope="col" class="py-3 px-6">
+                            Email
+                        </th>
+                        <th scope="col" class="py-3 px-6">
+                            Acción
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach ($contacts as $contact)
+
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{ $contact->user->name }}
+                        </th>
+                        <td class="py-4 px-6">
+                            {{ $contact->user->email }}
+                        </td>
+                        <td class="py-4 px-6">
+                            {{--
+                                Redireccionamos al formulario de edición y el registro entero del contacto, en el cual Laravel tomará en automatico el ID del Contacto
+                                para redireccionar a "http://localhost/contacts/{{$contact->id}}}/edit"
+                            --}}
+                            <a href="{{ route('contacts.edit', $contact) }}" class="flex">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                            </a>
+                        </td>
+                    </tr>
+
+                    @endforeach
+
+                </tbody>
+            </table>
+        </div>
+
         @else
             <div class="flex w-full overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
                 <div class="flex items-center justify-center w-12 bg-blue-500">
