@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ContactController;
+use App\Http\Livewire\ChatComponent;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,3 +33,8 @@ Route::get('/', function () {
 //                      Este método es util cuando hayan métodos que no lo vamos a utilizar, por lo tanto no hace falta que se encuentren en el controlador.
 // 1er Parametro => El nombre del método que no se va a tener en cuenta.
 Route::middleware('auth')->resource('contacts', ContactController::class)->names('contacts')->except('show');
+
+// Ruta que administrará el Controlador del Componente "Chat" creado con Livewire
+Route::get('/chat', ChatComponent::class)
+    ->middleware('auth')
+    ->name('chat.index');

@@ -16,7 +16,10 @@
                                                                        Puede ser: contacts.index, contacts.show, contacts.edit, etc.
                                                                        De esta manera marcará en que menú nos encontramos--}}
                     <x-jet-nav-link href="{{ route('contacts.index') }}" :active="request()->routeIs('contacts.*')">
-                        {{ __('Contactos') }}
+                        Contactos
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('chat.index') }}" :active="request()->routeIs('chat.index')">
+                        Chat
                     </x-jet-nav-link>
                 </div>
             </div>
@@ -141,7 +144,10 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-jet-responsive-nav-link href="{{ route('contacts.index') }}" :active="request()->routeIs('contacts.*')">
-                {{ __('Contactos') }}
+                Contactos
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('chat.index') }}" :active="request()->routeIs('chat.index')">
+                Chat
             </x-jet-responsive-nav-link>
         </div>
 
