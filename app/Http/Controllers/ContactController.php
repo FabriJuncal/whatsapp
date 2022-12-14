@@ -59,6 +59,14 @@ class ContactController extends Controller
         $user = User::where('email', $request->email)->first();
 
         // Hace un INSERT en la tabla "Contact" con los datos obtenidos de la tabla "User" filtrado por el Correo Electrónico
+
+        /*
+            El SQL Equivalente sería:
+
+            INSERT INTO contacts (name, user_id, contact_id)
+            VALUES (<$request->name>, <auth()->id()>, <$user->id>)
+        */
+
         $contact = Contact::create([
             'name' => $request->name,
             'user_id' => auth()->id(),
@@ -109,7 +117,44 @@ class ContactController extends Controller
      */
     public function update(Request $request, Contact $contact)
     {
-        //
+        // Validamos los datos enviados por HTTP desde el formulario
+        $request->validate([
+            'name' => 'required', // Obligatorio
+            'email' => [
+                'required',       // Obligatorio
+                'email',          // Debe tener formato de correo electrónico
+                'exists:users',   // Debe existir en la tabla de usuarios de la base de datos
+                Rule::notIn([auth()->user()->email]), // El correo electrónico no puede ser igual al correo electrónico del usuario autenticado en la aplicación
+                new InvalidEmail($contact->user->email)  // Regla Personalizada en el archivo: "app\Rules\InvalidEmail.php". Esta Regla valida que el email ingresado no pertenezca ya a un Contacto
+            ]
+        ]);
+
+        // Se busca el usuario en la BD con el correo electronico enviado desde el formulario
+        $user = User::where('email', $request->email)->first();
+
+        // Hace un UPDATE en la tabla "Contacts" filtrado por el ID de Contacto
+        /*
+            El SQL Equivalente sería:
+
+            UPDATE contacts
+            SET name = [$request->name],
+                contact_id = [$user->id]
+            WHERE id = [$contact->id]
+        */
+        $contact->update([
+            'name' => $request->name,
+            'contact_id' => $user->id
+        ]);
+
+        // flash.banner => Es una variable recervada por Jetstream para mostrar el mensaje en un componente
+        session()->flash('flash.banner', 'El contacto se actualizó correctamente');
+
+        // flash.bannerStyle => Es una variable recervada por Jetstream para dar estilo al componente que mostrará el mensaje
+        // Existen dos opciones de estilos "success" y "danger"
+        session()->flash('flash.bannerStyle', 'success');
+
+        // Redirecciona al apartado de edición de contactos
+        return redirect()->route('contacts.edit', $contact);
     }
 
     /**

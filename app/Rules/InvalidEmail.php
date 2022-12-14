@@ -7,14 +7,18 @@ use Illuminate\Contracts\Validation\Rule;
 
 class InvalidEmail implements Rule
 {
+
+    public $email;
+
     /**
      * Crear una nueva instancia de regla.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($email = null)
     {
-        //
+        // Se define este atributo para validar que se permitan una actualización con el email ya asignado al contacto
+        $this->email = $email;
     }
 
     /**
@@ -41,21 +45,25 @@ class InvalidEmail implements Rule
         */
 
         /*
-            El equivalente en SQL del siguiente código sería:
+            El SQL Equivalente sería:
 
             SELECT COUNT(*)
                 FROM contacts
-                WHERE user_id = [id del usuario autenticado]
+                WHERE user_id = [auth()->id()]
                     AND EXISTS (
-                        SELECT *
-                        FROM users
-                        WHERE users.email = [valor especificado]
-                            AND users.id = contacts.user_id
+                            SELECT *
+                            FROM users
+                            WHERE users.id = contacts.user_id
+                            AND  email = [$value]
+                            AND  ( email != [$this->email] OR email IS NULL )
                         )
         */
-        return Contact::where('user_id', auth()->id())
-                        ->whereHas('user', function($query) use ($value){
-                            $query->where('email', $value);
+        return Contact::where('user_id', auth()->id()) // En la tabla "Contacts" se filtra por el campo "user_id"
+                        ->whereHas('user', function($query) use ($value){ // En una subquery se hace referencia a la tabla "user"
+                            $query->where('email', $value) // Se filtra por el campo "email" de la tabla "user"
+                                ->when($this->email, function($query){ // Se agrega la condición que solo se ejecute la query cuando el parametro "$this->email" sea distinto de NULL
+                                    $query->where('email', '!=', $this->email); // Se filtra por el campo "email" en la tabla "user" y se le indica que obtenga los registros distinto al parametro "$this->email"
+                                });
                         })->count() === 0;
     }
 
