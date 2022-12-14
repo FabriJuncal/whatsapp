@@ -27,4 +27,8 @@ Route::get('/', function () {
 
 // ->names('contacts') => Se le asigna en plural el nombre de "contacts" a las rutas, es decir empezaran con la palabra "contacts".
 //                        Por ejemplo: contacts.index, contacts.show, etc.
-Route::middleware('auth')->resource('contacts', ContactController::class)->names('contacts');
+
+// ->except('show') => Indicamos que se tenga en cuenta todos los métodos de la clase "ContactController" menos el método "show" (Por que no lo estamos utilizando).
+//                      Este método es util cuando hayan métodos que no lo vamos a utilizar, por lo tanto no hace falta que se encuentren en el controlador.
+// 1er Parametro => El nombre del método que no se va a tener en cuenta.
+Route::middleware('auth')->resource('contacts', ContactController::class)->names('contacts')->except('show');

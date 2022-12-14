@@ -7,9 +7,13 @@
 
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <form action="{{ route('contacts.update', $contact) }}" method="POST" class="bg-white rounded-lg shadow p-6">
+        {{-- La directiva @csrf genera un token de seguridad que se envía junto con cada solicitud POST a la aplicación,
+            y el servidor verifica que este token sea válido antes de procesar la solicitud. De esta manera, se asegura que
+            todas las solicitudes POST enviadas a la aplicación provengan de una fuente confiable y autorizada. --}}
             @csrf
 
-            {{-- como es un formulario de actualización de registro se utiliza el Método "PUT" con esta directiva de Laravel, ya que el atributo "method" de HTML acepta "GET" y "POST" --}}
+            {{-- como es un formulario de actualización de registro se utiliza el Método "PUT" con esta directiva de Laravel,
+                ya que el atributo "method" de HTML acepta "GET" y "POST" --}}
             @method('PUT')
 
             <x-jet-validation-errors class="mb-4"/>

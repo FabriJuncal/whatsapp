@@ -85,18 +85,6 @@ class ContactController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $contact => Recibe como parametro un ID y lo relaciona automaticamente con el modelo Contact y de este modo se obtiene todo el registro relacionado con este ID en la tabla Contact
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Contact $contact)
-    {
-        //
-        return view('contacts.show', compact('contact'));
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $contact => Recibe como parametro un ID y lo relaciona automaticamente con el modelo Contact y de este modo se obtiene todo el registro relacionado con este ID en la tabla Contact
@@ -165,6 +153,24 @@ class ContactController extends Controller
      */
     public function destroy(Contact $contact)
     {
-        //
+        // Hace un DELETE en la tabla "Contacts" filtrado por el ID de Contacto
+
+        /*
+            El SQL Equivalente sería:
+
+            DELETE FROM contacts
+            WHERE id = $contact->id
+        */
+        $contact->delete();
+
+        // flash.banner => Es una variable recervada por Jetstream para mostrar el mensaje en un componente
+        session()->flash('flash.banner', 'El contacto se eliminó correctamente');
+
+        // flash.bannerStyle => Es una variable recervada por Jetstream para dar estilo al componente que mostrará el mensaje
+        // Existen dos opciones de estilos "success" y "danger"
+        session()->flash('flash.bannerStyle', 'success');
+
+        // Redirecciona al apartado de edición de contactos
+        return redirect()->route('contacts.index',);
     }
 }

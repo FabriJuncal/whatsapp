@@ -7,6 +7,10 @@
 
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <form action="{{ route('contacts.store') }}" method="POST" class="bg-white rounded-lg shadow p-6">
+
+        {{-- La directiva @csrf genera un token de seguridad que se envía junto con cada solicitud POST a la aplicación,
+            y el servidor verifica que este token sea válido antes de procesar la solicitud. De esta manera, se asegura que
+            todas las solicitudes POST enviadas a la aplicación provengan de una fuente confiable y autorizada. --}}
             @csrf
 
             <x-jet-validation-errors class="mb-4"/>
