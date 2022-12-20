@@ -37,7 +37,7 @@
         {{-- La plantilla tiene dos secciones de "empilamiento" (@stack), que se utilizan para añadir contenido adicional a la plantilla en las ubicaciones especificadas. En este caso, se utiliza para incluir modales y código JavaScript adicional en la página. --}}
         @stack('modals')
 
-        {{--  {{-- La plantilla incluye dos bloques de código Livewire (@livewireStyles y @livewireScripts), que son necesarios para integrar Livewire en la aplicación. Livewire es un marco de Laravel para construir aplicaciones web dinámicas sin tener que recargar la página. --}} --}}
+        {{-- La plantilla incluye dos bloques de código Livewire (@livewireStyles y @livewireScripts), que son necesarios para integrar Livewire en la aplicación. Livewire es un marco de Laravel para construir aplicaciones web dinámicas sin tener que recargar la página. --}}
         @livewireScripts
 
         @stack('js')
