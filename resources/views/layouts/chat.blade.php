@@ -17,6 +17,9 @@
         {{-- La plantilla incluye enlaces a dos archivos CSS y JS externos con la función @vite de Laravel. Esta función es una forma de incluir archivos de recursos de manera más eficiente en una aplicación Laravel. --}}
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+        <!-- CDN Font Awesome -->
+        <script src="https://kit.fontawesome.com/a43498efe3.js" crossorigin="anonymous"></script>
+
         <!-- Styles -->
         {{-- La plantilla incluye dos bloques de código Livewire (@livewireStyles y @livewireScripts), que son necesarios para integrar Livewire en la aplicación. Livewire es un marco de Laravel para construir aplicaciones web dinámicas sin tener que recargar la página. --}}
         @livewireStyles
@@ -29,7 +32,7 @@
         {{-- Se agrega el $slot donde irá todo el contenido de la página dentro del layout llamado "chat" --}}
         {{-- La plantilla tiene una sección con el contenido de la página, que se incluye dentro del elemento {{ $slot }}. Esto permite que la plantilla sea reutilizable y se pueda incluir el contenido de la página en diferentes ubicaciones. --}}
         <div class="absolute left-0 top-6 w-screen">
-            <div class="container mx-auto">
+            <div class="container max-w-screen-xl mx-auto">
                 {{ $slot }}
             </div>
         </div>
