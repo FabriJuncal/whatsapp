@@ -63,12 +63,21 @@
 
                 <div class="bg-gray-100 h-16 flex items-center px-3">
                     <figure>
-                        <img class="w-10 h-10 object-cover object-center" src="{{ $contactChat->user->profile_photo_url }}" alt="{{ auth()->user()->name }}">
+                        @if ($chat)
+                            <img class="w-10 h-10 object-cover object-center" src="{{ $chat->image }}" alt="{{ auth()->user()->name }}">
+                        @else
+                            <img class="w-10 h-10 object-cover object-center" src="{{ $contactChat->user->profile_photo_url }}" alt="{{ auth()->user()->name }}">
+                        @endif
                     </figure>
 
                     <div class="ml-4">
                         <p class="text-gray-800">
-                            {{ $contactChat->name }}
+                            @if ($chat)
+                                {{ $chat->name }}
+                            @else
+                                {{ $contactChat->name }}
+                            @endif
+
                         </p>
                         <p class="text-green-500 text-xs">
                             Online
