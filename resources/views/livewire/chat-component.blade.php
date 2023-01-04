@@ -81,8 +81,10 @@
 
                 </div>
 
-                <form class="bg-gray-100 h-16 flex items-center px-4">
-                    <x-jet-input type="text" class="flex-1" placeholder="Escriba un mensaje aquí" />
+                {{-- wire:submit.prevent => Ejecuta la función asignada sin ejecutar el evento por defecto del formulario que es recargar la página --}}
+                <form class="bg-gray-100 h-16 flex items-center px-4" wire:submit.prevent="sendMessage()">
+                    {{-- wire:model="bodyMessage" => Todo el texto que se escriba se almacena en la variable "bodyMessage" --}}
+                    <x-jet-input wire:model="bodyMessage" type="text" class="flex-1" placeholder="Escriba un mensaje aquí" />
                     <button class="flex-shrink-0 ml-4 text-2xl text-gray-700">
                         <i class="fa-solid fa-paper-plane"></i>
                     </button>
