@@ -60,13 +60,13 @@
         <div class="col-span-2">
 
             @if ($contactChat || $chat)
-
+                {{-- Header del Chat --}}
                 <div class="bg-gray-100 h-16 flex items-center px-3">
                     <figure>
                         @if ($chat)
-                            <img class="w-10 h-10 object-cover object-center" src="{{ $chat->image }}" alt="{{ auth()->user()->name }}">
+                            <img class="w-10 h-10 object-cover object-center" src="{{ $chat->image }}" alt="{{ $chat->name }}">
                         @else
-                            <img class="w-10 h-10 object-cover object-center" src="{{ $contactChat->user->profile_photo_url }}" alt="{{ auth()->user()->name }}">
+                            <img class="w-10 h-10 object-cover object-center" src="{{ $contactChat->user->profile_photo_url }}" alt="{{ $contactChat->name }}">
                         @endif
                     </figure>
 
@@ -86,8 +86,22 @@
                 </div>
 
                 {{-- Lista de Mensajes del Chat --}}
-                <div class="h-[calc(100vh-11rem)] overflow-auto">
+                <div class="h-[calc(100vh-11rem)] px-3 py-2 overflow-auto">
+                    @foreach ($this->pruebaMensajes as $message)
 
+                        <div class="flex justify-end mb-2">
+                            <div class="rounded px-3 py-2 bg-green-100">
+                                <p class="text-sm">
+                                    {{ $message->body }}
+                                </p>
+                                <p class="text-right text-xs text-gray-600 mt-1">
+                                    {{ $message->created_at->format('d-m-y h:i A') }}
+                                </p>
+                            </div>
+
+                        </div>
+
+                    @endforeach
                 </div>
 
                 {{-- wire:submit.prevent => Ejecuta la función asignada sin ejecutar el evento por defecto del formulario que es recargar la página --}}

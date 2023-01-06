@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Chat;
 use App\Models\Contact;
+use App\Models\Message;
 use Livewire\Component;
 
 class ChatComponent extends Component
@@ -16,16 +17,46 @@ class ChatComponent extends Component
 
     /*
         PROPIEDAD COMPUTADAS:
-        Las propiedades computadas son un tipo de propiedad de un objeto que se calcula en tiempo de ejecución a partir de otras propiedades
-        del objeto o valores externos. Se definen con una función y tienen un valor dinámico que puede cambiar según las condiciones.
-        Son comunes en lenguajes orientados a objetos y se utilizan para acceder fácilmente a valores dinámicos de manera consistente.
-        Ejemplo: un objeto que representa a una persona con propiedades "edad" y "años de jubilación", donde la propiedad "años de jubilación"
-        es una propiedad computada que se calcula a partir de la edad y una regla de jubilación establecida.
+        Las propiedades computadas en Laravel son aquellas que no se almacenan en la base de datos, sino que se calculan dinámicamente a partir de otras
+        propiedades de la clase. Es decir, son una forma de definir una propiedad que se "deriva" de otras propiedades, y que se puede utilizar como
+        cualquier otra propiedad, pero sin necesidad de almacenarla en la base de datos.
+
+        Por ejemplo, supongamos que tenemos una clase Product que tiene una propiedad price que almacena el precio del producto.
+        Podríamos definir una propiedad computada llamada discountedPrice que se calcule restando un porcentaje de descuento al precio del producto:
+
+        class Product
+        {
+            public function getDiscountedPriceProperty()
+            {
+                return $this->price * (1 - $this->discount);
+            }
+        }
+
+        Luego, podríamos acceder a la propiedad discountedPrice de una instancia de la clase Product como si fuera una propiedad normal:
+
+        $product = Product::find(1);
+        echo $product->discountedPrice;
+
+
+        TENER EN CUENTA: que para utilizar una propiedad computada se debe hacer uso de la siguiente convención.
+
+                        public function get[NOMBRE_PROPIEDAD_COMPUTADA]Property(){}
+
+                        Por ejemplo:
+
+                        public function getEstoEsUnaPruebaProperty(){}
+
+                        Y se deberá acceder de la siguiente forma:
+
+                        $this->estoEsUnaPrueba;
 
     */
+
+    // Propiedad computada que se utiliza en el buscador de contactos, en la vista podemos hacer uso de esta propiedad llamando a "$this->contacts"
     public function getContactsProperty()
     {
 
+        // Obtiene los contactos filtrando por la propiedad "search" vinculado al input del buscador del chat
         /*
             El SQL equivalente de la siguiente consulta con el ORM de Laravel es:
 
@@ -55,6 +86,20 @@ class ChatComponent extends Component
                 })
                 ->get() ?? [];
     }
+
+    // Propiedad computada que se utiliza al seleccionar un contacto y mostrar los mensajes existentes en el chat. , en la vista podemos hacer uso de esta propiedad llamando a "$this->messages"
+    public function getMessagesProperty()
+    {
+        // Se obtiene el listado de mensajes del chat
+        // Se utiliza $this->chat->messages()->get() en vez de $this->chat->messages, por que si utilizamos solo $this->chat->messages, este nos mostrará una instancia del chat
+        // y si usamos $this->chat->messages()->get(), ejecutará nuevamente la consulta y obtendrá la una nueva instancia del chat todo el tiempo.
+
+        // $this->chat->messages()->get() es lo mismo que utilizar Messages::where('chat_id', $this->chat->id)->get()
+
+        return $this->chat ? $this->chat->messages()->get() : [];
+    }
+
+    // =================================================================================================================================================
 
     public function open_chat_contact(Contact $contact)
     {
@@ -87,9 +132,15 @@ class ChatComponent extends Component
         // Si se encontró un chat existente, lo asigna a la propiedad de la clase
         if($chat){
             $this->chat = $chat;
+
+            // Resetea el campo contactChat para mostrar la imagen y el nombre de la propiedad chat
+            $this->reset('bodyMessage','contactChat');
         }else{
             // Si no se encontró un chat existente, asigna el contacto a la propiedad de la clase
             $this->contactChat = $contact;
+
+            // Resetea el campo chat para mostrar la imagen y el nombre de la propiedad contactChat
+            $this->reset('bodyMessage','chat');
         }
     }
 
