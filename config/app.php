@@ -60,16 +60,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Application Timezone
+    | Zona horaria de la aplicación
     |--------------------------------------------------------------------------
     |
-    | Here you may specify the default timezone for your application, which
-    | will be used by the PHP date and date-time functions. We have gone
-    | ahead and set this to a sensible default for you out of the box.
+    | Aquí puede especificar la zona horaria predeterminada para su aplicación,
+    | que será utilizada por las funciones de fecha y hora de PHP.
+    | Nos adelantamos y configuramos esto en un valor predeterminado razonable para usted listo para usar.
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'America/Argentina/Buenos_Aires',
 
     /*
     |--------------------------------------------------------------------------

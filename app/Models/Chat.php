@@ -19,7 +19,9 @@ class Chat extends Model
         'name', 'image_url', 'is_group'
     ];
 
-    // Mutadores
+    // =================================================================================================================================================
+    /* MUTADORES */
+
     public function name(): Attribute
     {
         return new Attribute(
@@ -57,6 +59,17 @@ class Chat extends Model
             }
         );
     }
+
+    public function lastMessageAt(): Attribute
+    {
+        return new Attribute(
+            get: function(){
+                return $this->messages->last()->created_at;
+            }
+        );
+    }
+
+    // =================================================================================================================================================
 
     public function messages()
     {
