@@ -87,7 +87,7 @@
 
                 {{-- Lista de Mensajes del Chat --}}
                 <div class="h-[calc(100vh-11rem)] px-3 py-2 overflow-auto">
-                    @foreach ($this->pruebaMensajes as $message)
+                    @foreach ($this->messages as $message)
 
                         <div class="flex justify-end mb-2">
                             <div class="rounded px-3 py-2 bg-green-100">
