@@ -21,37 +21,67 @@
 
             {{-- Listado de Chats --}}
             <div class="h-[calc(100vh-10.5rem)] overflow-auto border-t border-gray-200">
-                <div class="px-4 py-3">
-                    <h2 class="text-teal-600 text-lg mb-4">Contáctos</h2>
+
+                @if($this->chats->count() == 0 || $search)
+
+                    <div class="px-4 py-3">
+                        <h2 class="text-teal-600 text-lg mb-4">Contáctos</h2>
 
 
-                    <ul class="space-y-4">
-                        @forelse ($this->contacts as $contact)
-                            <li class="cursor-pointer" wire:click="open_chat_contact({{ $contact }})">
-                                <div class="flex">
-                                    {{-- Foto de Perfil de los Contactos --}}
-                                    <figure class="flex-shrink-0">
-                                        <img class="h-12 w-12 object-cover object-center rounded-full" src="{{ $contact->user->profile_photo_url }}" alt="{{ $contact->name }}">
-                                    </figure>
+                        <ul class="space-y-4">
+                            @forelse ($this->contacts as $contact)
+                                <li class="cursor-pointer" wire:click="open_chat_contact({{ $contact }})">
+                                    <div class="flex">
+                                        {{-- Foto de Perfil de los Contactos --}}
+                                        <figure class="flex-shrink-0">
+                                            <img class="h-12 w-12 object-cover object-center rounded-full" src="{{ $contact->user->profile_photo_url }}" alt="{{ $contact->name }}">
+                                        </figure>
 
-                                    <div class="flex-1 ml-5 border-b border-gray-200">
-                                        {{-- Nombre de los Contactos --}}
-                                        <p class="text-gray-800">
-                                            {{ $contact->name }}
-                                        </p>
-                                        {{-- Email de los Contactos --}}
-                                        <p class="text-gray-600 text-xs">
-                                            {{ $contact->user->email }}
-                                        </p>
+                                        <div class="flex-1 ml-5 border-b border-gray-200">
+                                            {{-- Nombre de los Contactos --}}
+                                            <p class="text-gray-800">
+                                                {{ $contact->name }}
+                                            </p>
+                                            {{-- Email de los Contactos --}}
+                                            <p class="text-gray-600 text-xs">
+                                                {{ $contact->user->email }}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
+                                </li>
 
-                        @empty
+                            @empty
 
-                        @endforelse
-                    </ul>
-                </div>
+                            @endforelse
+                        </ul>
+                    </div>
+
+                @else
+
+                    <h2 class="text-teal-600 text-lg px-4 py-3">Chats</h2>
+                    @foreach ($this->chats as $chatItem)
+                        <div wire:key="chats-{{ $chatItem->id }}"
+                            wire:click="open_chat({{$chatItem}})"
+                            class="flex items-center {{ $chat && $chat->id == $chatItem->id ? 'bg-gray-100' : 'bg-white'}} hover:bg-gray-100 cursor-pointer px-3">
+
+                            <figure>
+                                    <img src="{{ $chatItem->image }}" alt="{{ $chatItem->name }}" class="h-12 w-12 object-cover object-center rounded-full">
+                            </figure>
+
+                            <div class="ml-4 flex-1 py-4 border-b border-gray-200">
+                                    <p>
+                                        {{ $chatItem->name }}
+                                    </p>
+                                    <p class="text-xs">
+                                        12:45 pm
+                                    </p>
+                            </div>
+                        </div>
+                    @endforeach
+
+                @endif
+
+
             </div>
 
         </div>

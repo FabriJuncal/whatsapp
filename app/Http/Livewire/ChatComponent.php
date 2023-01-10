@@ -99,6 +99,11 @@ class ChatComponent extends Component
         return $this->chat ? $this->chat->messages()->get() : [];
     }
 
+    public function getChatsProperty()
+    {
+        return auth()->user()->chats()->get();
+    }
+
     // =================================================================================================================================================
 
     public function open_chat_contact(Contact $contact)
@@ -134,14 +139,20 @@ class ChatComponent extends Component
             $this->chat = $chat;
 
             // Resetea el campo contactChat para mostrar la imagen y el nombre de la propiedad chat
-            $this->reset('bodyMessage','contactChat');
+            $this->reset('bodyMessage','contactChat', 'search');
         }else{
             // Si no se encontró un chat existente, asigna el contacto a la propiedad de la clase
             $this->contactChat = $contact;
 
             // Resetea el campo chat para mostrar la imagen y el nombre de la propiedad contactChat
-            $this->reset('bodyMessage','chat');
+            $this->reset('bodyMessage','chat', 'search');
         }
+    }
+
+    public function open_chat(Chat $chat)
+    {
+        $this->chat = $chat;
+        $this->reset('contactChat', 'bodyMessage');
     }
 
     public function sendMessage()
