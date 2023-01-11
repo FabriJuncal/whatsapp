@@ -18,6 +18,29 @@ class ChatComponent extends Component
     public $chat;
     public $bodyMessage;
 
+    // Oyentes
+
+    // Este método se utiliza para escuchar en un canal especifico emitido por Pusher.
+    public function getListeners()
+    {
+        // Obtenemos el ID del usuario logedo
+        $user_id = auth()->user()->id;
+
+        // Retornamos un array donde:
+        // 1er Parametro / Key del Array => Es el canal de Pusher por el cual se va a escuchar.
+        //                                  (Se concatena la variable "$user_id" para hacerlo dinamico para cada usuario logeado)
+        // 2do Parametro / Value del Array => Es el método que se va a ejecutar cada vez que se reciba una notificación a travez del canal especificado en el 1er Parametro/Key del array.
+
+       // Mas detalles:
+       // echo-notification => es un evento en tiempo real que se activa cuando se recibe una notificación.
+       // App.Models.User.{$user_id} => especifica que esta escucha es para un usuario específico, se especifica como "App.Models.User" y se concatena con el id del usuario autenticado.
+       // notification => Indicamos a Livewire que el evento que ejecutará una transmisión será una notificación
+       // render => Es el método que se ejecutará luego de recibír una transmisión mediante el evento "notification"
+        return[
+            "echo-notification:App.Models.User.{$user_id},notification" => 'render'
+        ];
+    }
+
     /*
         PROPIEDAD COMPUTADAS:
         Las propiedades computadas en Laravel son aquellas que no se almacenan en la base de datos, sino que se calculan dinámicamente a partir de otras
@@ -102,11 +125,14 @@ class ChatComponent extends Component
         return $this->chat ? $this->chat->messages()->get() : [];
     }
 
+    // Propiedad computada que se utiliza para obtener los chats ordenados de manera Descendente por el Mutador "last_message_at", es decir,
+    // los mensajes con la fecha del mensaje mas reciente se mostrarán primeros en la lista
     public function getChatsProperty()
     {
         return auth()->user()->chats()->get()->sortByDesc('last_message_at');
     }
 
+    // Propiedad computada que se utiliza para obtener el/los ID/s Usuario de/los Contacto/s el cual enviamos un mensaje
     public function getUsersNotificationsProperty()
     {
         return $this->chat ? $this->chat->users->where('id', '!=', auth()->id()) : [];
@@ -114,6 +140,7 @@ class ChatComponent extends Component
 
     // =================================================================================================================================================
 
+    // Obtiene o Crea el Chat del Contacto que se seleccionó
     public function open_chat_contact(Contact $contact)
     {
 
