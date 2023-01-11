@@ -43,6 +43,9 @@ sail artisan make:controller ContactController -r
 // Creamos una Regla personalizada para validar el formulario "Contactos"
 sail artisan make:rule InvalidEmail
 
-// Creamos un componente de Livewire
+// Creamos un Componente de Livewire
 sail artisan make:livewire ChatComponent
+
+// Creamos una Notificación para informar a los usuarios que se le envió un mensaje
+sail artisan make:notification NewMessage
 

@@ -7,6 +7,9 @@ use App\Models\Contact;
 use App\Models\Message;
 use Livewire\Component;
 
+// Importamos la Libreria de Notificaciones
+use Illuminate\Support\Facades\Notification;
+
 class ChatComponent extends Component
 {
 
@@ -104,6 +107,11 @@ class ChatComponent extends Component
         return auth()->user()->chats()->get()->sortByDesc('last_message_at');
     }
 
+    public function getUsersNotificationsProperty()
+    {
+        return $this->chat ? $this->chat->users->where('id', '!=', auth()->id()) : [];
+    }
+
     // =================================================================================================================================================
 
     public function open_chat_contact(Contact $contact)
@@ -197,6 +205,12 @@ class ChatComponent extends Component
             'body' => $this->bodyMessage,
             'user_id' => auth()->user()->id
         ]);
+
+
+        // Utilizamos el Facade "Notification" para enviar la notificación a Pusher
+        // 1er parametro -> ID de los usuarios a notificar
+        // 2do Parametro -> Ruta y Nombre de la Clase de la notificación creada
+        Notification::send($this->getUsersNotificationsProperty(), new \App\Notifications\NewMessage);
 
         // Resetea los campos de mensaje y contacto para una nueva entrada
         $this->reset('bodyMessage', 'contactChat');
