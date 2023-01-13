@@ -29,11 +29,13 @@ class ChatComponent extends Component
         // Retornamos un array donde:
         // 1er Parametro / Key del Array => Es el canal de Pusher por el cual se va a escuchar.
         //                                  (Se concatena la variable "$user_id" para hacerlo dinamico para cada usuario logeado)
-        // 2do Parametro / Value del Array => Es el método que se va a ejecutar cada vez que se reciba una notificación a travez del canal especificado en el 1er Parametro/Key del array.
+        // 2do Parametro / Value del Array => Es el método que se va a ejecutar cada vez que se reciba una notificación a travez del
+        //                                    canal especificado en el 1er Parametro/Key del array.
 
        // Mas detalles:
        // echo-notification => es un evento en tiempo real que se activa cuando se recibe una notificación.
-       // App.Models.User.{$user_id} => especifica que esta escucha es para un usuario específico, se especifica como "App.Models.User" y se concatena con el id del usuario autenticado.
+       // App.Models.User.{$user_id} => especifica que esta escucha es para un usuario específico, se especifica como "App.Models.User"
+       //                               y se concatena con el id del usuario autenticado.
        // notification => Indicamos a Livewire que el evento que ejecutará una transmisión será una notificación
        // render => Es el método que se ejecutará luego de recibír una transmisión mediante el evento "notification"
         return[
