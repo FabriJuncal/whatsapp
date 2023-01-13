@@ -49,3 +49,13 @@ sail artisan make:livewire ChatComponent
 // Creamos una Notificación para informar a los usuarios que se le envió un mensaje
 sail artisan make:notification NewMessage
 
+// El comando "sail artisan queue:table" crea una nueva tabla en la base de datos que se utilizará para almacenar información de las tareas en cola.
+// Esta tabla se utiliza para llevar un registro de las tareas en cola y su estado, y es necesaria para utilizar las funciones de cola de trabajo en Laravel.
+sail artisan queue:table
+
+// Ejecutamos la migración para que se cree la tabla en la base de datos
+sail artisan migrate
+
+// Iniciar servidor que detecte todas las peticiones que se agreguen en la tabla "jobs" es decir todas las peticiones que se agreguen en cola
+// Esto hará que el servidor cada vez que detecte una petición en cola, los vaya despachando, es decir, vaya ejecutando las peticiones una por una que se fueron agregando en la lista de espera.
+sail artisan queeu:work
