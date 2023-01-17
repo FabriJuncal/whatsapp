@@ -245,8 +245,16 @@ class ChatComponent extends Component
         $this->reset('bodyMessage', 'contactChat');
     }
 
+    // Método que se ejecuta para renderizar el componente de Livewire sin recargar la página
     public function render()
     {
+        if($this->chat){
+            // Desencadena un evento personalizado en Livewire.
+            // Esto significa que cuando se ejecuta esta línea de código, Livewire detecta el evento "scrollIntoView" y
+            // ejecuta todas las funciones de escucha asociadas a ese evento.
+            $this->emit('scrollIntoView');
+        }
+
 
         // view('livewire.chat-component') => Muestra la vista del componente "chat" de Livewire
         // ->layout('[Ruta Layout]') => Se utiliza para asignar un Layouts a un componente de Livewire.

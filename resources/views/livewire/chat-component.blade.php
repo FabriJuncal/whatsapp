@@ -140,6 +140,8 @@
                         </div>
 
                     @endforeach
+
+                    <span id="final"></span>
                 </div>
 
                 {{-- wire:submit.prevent => Ejecuta la función asignada sin ejecutar el evento por defecto del formulario que es recargar la página --}}
@@ -183,4 +185,18 @@
 
         </div>
     </div>
+
+    @push('js')
+        <script>
+            // Escucha el evento "scrollIntoView" con en Livewire.
+            // Cuando se desencadene el evento "scrollIntoView" en algún lugar de la aplicación, la función se activa.
+            // Por ejemplo en el archivo "app\Http\Livewire\ChatComponent.php" ejecuta la función para desencadenar el evento:
+
+            // $this->emit('scrollIntoView');
+
+            Livewire.on('scrollIntoView', () => {
+                document.getElementById('final').scrollIntoView(true);
+            });
+        </script>
+    @endpush
 </div>
