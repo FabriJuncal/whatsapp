@@ -16,6 +16,7 @@ class ChatComponent extends Component
     public $search;
     public $contactChat;
     public $chat;
+    public $chat_id;
     public $bodyMessage;
 
     // Oyentes
@@ -142,6 +143,26 @@ class ChatComponent extends Component
 
     // =================================================================================================================================================
 
+    // updatedBodyMessage => Utilizando la convención "update" luego el nombre de la propiedad $bodyMessage lo que hace es escuchar cuando se modifique el valor de este
+    //                       y obtener el nuevo valor por el atributo "$value".
+    // Para agregar un evento que escuche todo el tiempo si se modifica el valor de una propiedad lo que se debe hacer es:
+    //  1) Crear la propiedad en la clase
+    //  2) crear un método siguiente la siguiente convención:
+    //          update[NOMBRE_PROPIEDAD]
+    //  Ej:
+    //          updatedBodyMessage
+    //
+    // Tener en cuenta que el nombre de la propiedad se empieza con mayusculas
+    public function updatedBodyMessage($value)
+    {
+        if($value){
+            // Utilizamos el Facade "Notification" para enviar la notificación a Pusher
+            // 1er parametro -> ID de los usuarios a notificar
+            // 2do Parametro -> Ruta y Nombre de la Clase de la notificación creada
+            Notification::send($this->getUsersNotificationsProperty(), new \App\Notifications\UserTyping($this->chat->id));
+        }
+    }
+
     // Obtiene o Crea el Chat del Contacto que se seleccionó
     public function open_chat_contact(Contact $contact)
     {
@@ -174,7 +195,9 @@ class ChatComponent extends Component
         // Si se encontró un chat existente, lo asigna a la propiedad de la clase
         if($chat){
             $this->chat = $chat;
-
+            // Se almacena el id del chat abierto a la propiedad "chat_id" para utilizarlo en la vista
+            // mediante la directiva "@entangle('chat_id')"
+            $this->chat_id = $chat->id;
             // Resetea el campo contactChat para mostrar la imagen y el nombre de la propiedad chat
             $this->reset('bodyMessage','contactChat', 'search');
         }else{
@@ -189,6 +212,9 @@ class ChatComponent extends Component
     public function open_chat(Chat $chat)
     {
         $this->chat = $chat;
+        // Se almacena el id del chat abierto a la propiedad "chat_id" para utilizarlo en la vista
+        // mediante la directiva "@entangle('chat_id')"
+        $this->chat_id = $chat->id;
         $this->reset('contactChat', 'bodyMessage');
     }
 
@@ -204,6 +230,9 @@ class ChatComponent extends Component
             // SQL Equivalente:
             // INSERT INTO chats (id, created_at, updated_at) VALUES (:id, :created_at, :updated_at)
             $this->chat = Chat::create();
+            // Se almacena el id del chat abierto a la propiedad "chat_id" para utilizarlo en la vista
+            // mediante la directiva "@entangle('chat_id')"
+            $this->chat_id = $this->chat->id;
 
             /*
                 El método attach en Laravel es utilizado para agregar registros a una tabla pivote de una relación de muchos a muchos.

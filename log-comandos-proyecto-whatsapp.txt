@@ -59,3 +59,9 @@ sail artisan migrate
 // Iniciar servidor que detecte todas las peticiones que se agreguen en la tabla "jobs" es decir todas las peticiones que se agreguen en cola
 // Esto hará que el servidor cada vez que detecte una petición en cola, los vaya despachando, es decir, vaya ejecutando las peticiones una por una que se fueron agregando en la lista de espera.
 sail artisan queeu:work
+
+// Creamos una nueva Notificación para informar cuando el otro usuario esta escribiendo
+sail artisan make:notification UserTyping
+
+// Se elimina la cache en un proyecto en Laravel y se vuelven a cargar las configuraciones del proyecto
+sail artisan cache:clear

@@ -1,4 +1,16 @@
-<div class="bg-gray-50 rounded-lg shadow border border-gray-200 overflow-hidden">
+{{-- x-data => El atributo "x-data" en Alpine.js se usa para vincular datos al componente.
+            Le permite definir un objeto JavaScript que contiene los datos para el componente y lo pone
+            a disposición para su uso en la plantilla.
+            El valor del atributo "x-data" debe ser un objeto JavaScript que contenga los datos del componente.
+            También puede usar expresiones de JavaScript para definir los datos, por ejemplo, puede usar una función
+            que devuelve un objeto.
+
+    Ej:
+        <div x-data="{ message: 'Hello World' }">
+            <p x-text="message"></p>
+        </div>
+--}}
+<div x-data="data()" class="bg-gray-50 rounded-lg shadow border border-gray-200 overflow-hidden">
     <div class="grid grid-cols-3 divide-x divide-gray-200">
 
         {{-- Filtro y Listado de Chats --}}
@@ -117,7 +129,19 @@
                             @endif
 
                         </p>
-                        <p class="text-green-500 text-xs">
+                        {{--
+                            Validamos si la otra persona le esta escribiendo al usuario autenticado.
+
+                            x-show => Es un atributo del framework "alpine.js" se usa para mostrar u ocultar condicionalmente un elemento basado
+                                    en el valor de una expresión booleana.
+
+                            chat_id == typingChatId => Se valida que el chat donde esta escribiendo la otra persona al usuario autenticado sea igual al chat
+                                                    donde se encuentra ubicado el usuario autenticado.
+                        --}}
+                        <p class="text-gray-600 text-xs" x-show="chat_id == typingChatId">
+                            Escribiendo...
+                        </p>
+                        <p class="text-green-500 text-xs" x-show="chat_id != typingChatId">
                             Online
                         </p>
                     </div>
@@ -188,6 +212,44 @@
 
     @push('js')
         <script>
+
+/**
+  * Datos de funciones
+  *
+  * Esta función devuelve un objeto que contiene las siguientes propiedades:
+  * - chat_id: esta propiedad se establece en el valor de la variable 'chat_id' obtenida de la directiva de Laravel @ entangle.
+  * - TypingChatid: esta propiedad se inicializa en NULL  y se usará para almacenar la ID de chat actual cuando un usuario está escribiendo.
+  * - Init: Al inicializar el componente de Livewire se ejecuta que contiene dentro.
+  */
+            function data(){
+                return{
+                    // @entangle('chat_id') => Obtiene el valor de la variable "chat_id" del controlador (es decir, del archivo .php del componente de livewire)
+                    chat_id: @entangle('chat_id'),
+                    typingChatId: null,
+                    // Se ejecuta al inicializarse el componente de Livewire
+                    init(){
+                        // Echo.private: Esto configura un canal privado usando la biblioteca de Echo y escucha las notificaciones enviadas al canal especificado.
+                        //  En este caso el canal se encuentra en el servidor de Pusher y se concatena el ID del usuario autenticado, ya que en este se enviarán las notifiaciones
+                        // relacionadas a este usuario. El canal en Pusher se ve así: "App.Models.User.11"
+                        Echo.private('App.Models.User.' + {{ auth()->id() }})
+                            .notification((notification) => {
+                                // Validamos que la notificación recibida sea halla ejecuado desde la notificación "UserTyping"
+                                if(notification.type == 'App\\Notifications\\UserTyping'){
+                                    // Asignamos el ID del chat a "typingChatId" para validar el chat en el que le estan escribiendo al usuario autenticado
+                                    this.typingChatId = notification.chat_id;
+
+                                    // Luego de que pasen 3 segundos y la persona que esta escribiendo al usuario autenticado deje de hacerlo,
+                                    // se define la variable "typingChatId" como null y de esta manera dejamos de avisarle al usuario autenticado que estan escribiendo en el chat
+                                    setTimeout(() => {
+                                        this.typingChatId = null;
+                                    }, 3000);
+                                }
+                            })
+                    }
+                }
+            }
+
+
             // Escucha el evento "scrollIntoView" con en Livewire.
             // Cuando se desencadene el evento "scrollIntoView" en algún lugar de la aplicación, la función se activa.
             // Por ejemplo en el archivo "app\Http\Livewire\ChatComponent.php" ejecuta la función para desencadenar el evento:
