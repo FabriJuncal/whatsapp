@@ -18,10 +18,12 @@ class ChatComponent extends Component
     public $chat;
     public $chat_id;
     public $bodyMessage;
+    // =================================================================================================================================================
+    /* OYENTES */
 
-    // Oyentes
-
-    // Este método se utiliza para escuchar en un canal especifico emitido por Pusher.
+    // Este método se utiliza para escuchar en un canales especifico emitido por Pusher.
+    // Para escuchar una lista de canales se debe retornar un array con los nombres de los canales y
+    // los eventos que se van a ejecutar cuando se conecten a dicho canal.
     public function getListeners()
     {
         // Obtenemos el ID del usuario logedo
@@ -40,12 +42,15 @@ class ChatComponent extends Component
        // notification => Indicamos a Livewire que el evento que ejecutará una transmisión será una notificación
        // render => Es el método que se ejecutará luego de recibír una transmisión mediante el evento "notification"
         return[
-            "echo-notification:App.Models.User.{$user_id},notification" => 'render'
+            "echo-notification:App.Models.User.{$user_id},notification" => 'render',
+            "echo-presence:chat.1,here" => 'chatHere',
+            "echo-presence:chat.1,joining" => 'chatJoining',
+            "echo-presence:chat.1,leaving" => 'chatLeaving'
         ];
     }
-
+    // =================================================================================================================================================
+    /*  PROPIEDAD COMPUTADAS: */
     /*
-        PROPIEDAD COMPUTADAS:
         Las propiedades computadas en Laravel son aquellas que no se almacenan en la base de datos, sino que se calculan dinámicamente a partir de otras
         propiedades de la clase. Es decir, son una forma de definir una propiedad que se "deriva" de otras propiedades, y que se puede utilizar como
         cualquier otra propiedad, pero sin necesidad de almacenarla en la base de datos.
@@ -142,6 +147,7 @@ class ChatComponent extends Component
     }
 
     // =================================================================================================================================================
+    /* CICLO DE VIDA */
 
     // updatedBodyMessage => Utilizando la convención "update" luego el nombre de la propiedad $bodyMessage lo que hace es escuchar cuando se modifique el valor de este
     //                       y obtener el nuevo valor por el atributo "$value".
@@ -162,6 +168,9 @@ class ChatComponent extends Component
             Notification::send($this->getUsersNotificationsProperty(), new \App\Notifications\UserTyping($this->chat->id));
         }
     }
+
+    // =================================================================================================================================================
+    /* FUNCIONES QUE SE EJECUTAN POR UN EVENTO */
 
     // Obtiene o Crea el Chat del Contacto que se seleccionó
     public function open_chat_contact(Contact $contact)
@@ -272,6 +281,30 @@ class ChatComponent extends Component
 
         // Resetea los campos de mensaje y contacto para una nueva entrada
         $this->reset('bodyMessage', 'contactChat');
+    }
+
+    // Función que se ejecuta en el momento que nos encontremos ubicados en la página chat
+    // $event => Obtendrá los datos del usuario retornado en el archivo "routes\channels.php"
+    // en el canal con el nombre "chat.1" de tipo "presence"
+    public function chatHere($event)
+    {
+        // dd($event);
+    }
+
+    // Función que se ejecuta en el momento que ingresa un nuevo usuario a la página chat
+    // $event => Obtendrá los datos del usuario retornado en el archivo "routes\channels.php"
+    // en el canal con el nombre "chat.1" de tipo "presence"
+    public function chatJoining($event)
+    {
+        // dd($event);
+    }
+
+    // Función que se ejecuta en el momento que un usuario sale de la página chat
+    // $event => Obtendrá los datos del usuario retornado en el archivo "routes\channels.php"
+    // en el canal con el nombre "chat.1" de tipo "presence"
+    public function chatLeaving($event)
+    {
+        // dd($event);
     }
 
     // Método que se ejecuta para renderizar el componente de Livewire sin recargar la página
