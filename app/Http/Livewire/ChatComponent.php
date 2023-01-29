@@ -18,6 +18,13 @@ class ChatComponent extends Component
     public $chat;
     public $chat_id;
     public $bodyMessage;
+    public $users;
+
+    // Método que se ejecuta antes de inicializarce el componente de livewire "ChatComponent"
+    // Inicializa la propiedad "users" como una colección/array vacia para evitar errores.
+    public function mount(){
+        $this->users = collect();
+    }
     // =================================================================================================================================================
     /* OYENTES */
 
@@ -146,6 +153,12 @@ class ChatComponent extends Component
         return $this->chat ? $this->chat->users->where('id', '!=', auth()->id()) : [];
     }
 
+    // Compara los usuarios que se encuentan activos (Los IDs de los usuarios que se encuentra dentro de $this->users)
+    // Con el usuario que se encuentra en el chat al que se ingresó.
+    public function getActiveProperty(){
+        // ->contains() =>  Es un método de colección que determina si un determinado elemento está presente en la colección o no
+        return $this->users->contains($this->users_notifications->first()->id);
+    }
     // =================================================================================================================================================
     /* CICLO DE VIDA */
 
@@ -284,27 +297,32 @@ class ChatComponent extends Component
     }
 
     // Función que se ejecuta en el momento que nos encontremos ubicados en la página chat
-    // $event => Obtendrá los datos del usuario retornado en el archivo "routes\channels.php"
+    // $users => Obtendrá los datos del usuario retornado en el archivo "routes\channels.php"
     // en el canal con el nombre "chat.1" de tipo "presence"
-    public function chatHere($event)
+    public function chatHere($users)
     {
-        // dd($event);
+        $this->users = collect($users)->pluck('id');
     }
 
     // Función que se ejecuta en el momento que ingresa un nuevo usuario a la página chat
-    // $event => Obtendrá los datos del usuario retornado en el archivo "routes\channels.php"
+    // $user => Obtendrá los datos del usuario retornado en el archivo "routes\channels.php"
     // en el canal con el nombre "chat.1" de tipo "presence"
-    public function chatJoining($event)
+    public function chatJoining($user)
     {
-        // dd($event);
+        // Si un usuario ingresó a la sala de chats se ingresa el ID de este en la propiedad "$this->users"
+        $this->users->push($user['id']);
     }
 
     // Función que se ejecuta en el momento que un usuario sale de la página chat
-    // $event => Obtendrá los datos del usuario retornado en el archivo "routes\channels.php"
+    // $user => Obtendrá los datos del usuario retornado en el archivo "routes\channels.php"
     // en el canal con el nombre "chat.1" de tipo "presence"
-    public function chatLeaving($event)
+    public function chatLeaving($user)
     {
-        // dd($event);
+        // Si un usuario salió de la sala de chats se quita el ID de este de la propiedad "this->users"
+        $this->users = $this->users->filter(function($id) use ($user){
+            // Recorre la propiedad "$this->users" (es una colección) y retorna un nuevo array con el ID distinto al que se le pasó como parametro
+            return $id != $user['id'];
+        });
     }
 
     // Método que se ejecuta para renderizar el componente de Livewire sin recargar la página
