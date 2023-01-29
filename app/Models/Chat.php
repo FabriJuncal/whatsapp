@@ -69,6 +69,17 @@ class Chat extends Model
         );
     }
 
+    // Obtiene la cantidad de mensajes de un chat que sean distinto al usuario autenticado y que el campo "is_read" sea igual a falso.
+    // Es decir, obtiene los mensajes no leidos de un chat
+    public function unreadMessages(): Attribute
+    {
+        return new Attribute(
+            get: function(){
+                return $this->messages()->where('user_id', '!=', auth()->id())->where('is_read', false)->count();
+            }
+        );
+    }
+
     // =================================================================================================================================================
 
     public function messages()

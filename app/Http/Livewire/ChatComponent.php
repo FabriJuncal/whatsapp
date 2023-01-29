@@ -238,6 +238,16 @@ class ChatComponent extends Component
         // mediante la directiva "@entangle('chat_id')"
         $this->chat_id = $chat->id;
         $this->reset('contactChat', 'bodyMessage');
+
+        // Actualizamos el campo "is_read" a "true" en la base de datos
+        $chat->messages()->where('user_id', '!=', auth()->id())->where('is_read', false)->update([
+            'is_read' => true
+        ]);
+
+        // Utilizamos el Facade "Notification" para enviar la notificación a Pusher
+        // 1er parametro -> ID de los usuarios a notificar
+        // 2do Parametro -> Ruta y Nombre de la Clase de la notificación creada (En este caso se llama "ReadMessage")
+        Notification::send($this->getUsersNotificationsProperty(), new \App\Notifications\ReadMessage);
     }
 
     public function sendMessage()
@@ -289,7 +299,7 @@ class ChatComponent extends Component
 
         // Utilizamos el Facade "Notification" para enviar la notificación a Pusher
         // 1er parametro -> ID de los usuarios a notificar
-        // 2do Parametro -> Ruta y Nombre de la Clase de la notificación creada
+        // 2do Parametro -> Ruta y Nombre de la Clase de la notificación creada (En este caso se llama "NewMessage")
         Notification::send($this->getUsersNotificationsProperty(), new \App\Notifications\NewMessage);
 
         // Resetea los campos de mensaje y contacto para una nueva entrada

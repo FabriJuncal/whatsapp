@@ -65,3 +65,6 @@ sail artisan make:notification UserTyping
 
 // Se elimina la cache en un proyecto en Laravel y se vuelven a cargar las configuraciones del proyecto
 sail artisan cache:clear
+
+// Creamos una nueva notificación para informar cuando se halla leido un mensaje
+sail artisan make:notification ReadMessage

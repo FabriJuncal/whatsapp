@@ -10,7 +10,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 // Implementamos "ShouldQueue" a la clase
-class NewMessage extends Notification implements ShouldQueue
+class ReadMessage extends Notification  implements ShouldQueue
 {
     use Queueable;
 

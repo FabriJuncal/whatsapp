@@ -82,19 +82,28 @@
 
                             <div class="w-[calc(100%-4rem)] ml-4 py-4 border-b border-gray-200">
                                 <div class="flex justify-between items-center">
-                                    <p>
-                                        {{ $chatItem->name }}
-                                    </p>
-                                    <p class="text-xs">
-                                        {{ $chatItem->last_message_at->format('h:i A') }}
-                                    </p>
+                                    <div>
+                                        <p>
+                                            {{ $chatItem->name }}
+                                        </p>
+                                        <p class="text-sm text-gray-700 mt-1 truncate">
+                                            {{ $chatItem->messages->last()->body }}
+                                        </p>
+                                    </div>
+
+                                    <div class="text-right">
+                                        <p class="text-xs">
+                                            {{ $chatItem->last_message_at->format('h:i A') }}
+                                        </p>
+
+                                        {{-- Mostramos el componente Badge con la cantidad de mensajes no leidos --}}
+                                        @if ( $chatItem->unread_messages)
+                                            <span class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-green-100 bg-green-600 rounded-full">
+                                                {{ $chatItem->unread_messages }}
+                                            </span>
+                                        @endif
+                                    </div>
                                 </div>
-
-                                <p class="text-sm text-gray-700 mt-1 truncate">
-                                    {{ $chatItem->messages->last()->body }}
-                                </p>
-
-
                             </div>
                         </div>
                     @endforeach
@@ -166,6 +175,11 @@
                                 </p>
                                 <p class="text-right text-xs text-gray-600 mt-1">
                                     {{ $message->created_at->format('d-m-y h:i A') }}
+
+                                    {{-- Mostramos el icono de enviado o leido en el mensaje que envia el usuario autenticado --}}
+                                    @if ($message->user_id == auth()->id())
+                                        <i class="fa-solid fa-check-double {{ $message->is_read ? 'text-blue-500' : 'text-gray-600' }}"></i>
+                                    @endif
                                 </p>
                             </div>
 
