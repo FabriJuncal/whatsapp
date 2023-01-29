@@ -339,6 +339,17 @@ class ChatComponent extends Component
     public function render()
     {
         if($this->chat){
+
+            // Actualizamos el campo "is_read" a "true" en la base de datos
+            $this->chat->messages()->where('user_id', '!=', auth()->id())->where('is_read', false)->update([
+                'is_read' => true
+            ]);
+
+            // Utilizamos el Facade "Notification" para enviar la notificación a Pusher
+            // 1er parametro -> ID de los usuarios a notificar
+            // 2do Parametro -> Ruta y Nombre de la Clase de la notificación creada (En este caso se llama "ReadMessage")
+            Notification::send($this->getUsersNotificationsProperty(), new \App\Notifications\ReadMessage);
+
             // Desencadena un evento personalizado en Livewire.
             // Esto significa que cuando se ejecuta esta línea de código, Livewire detecta el evento "scrollIntoView" y
             // ejecuta todas las funciones de escucha asociadas a ese evento.
