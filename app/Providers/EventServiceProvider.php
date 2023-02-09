@@ -18,6 +18,14 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+
+        // Definimos los eventos de la siguiente manera, estos archivos se crearan en la ruta especificada ("App\Events\OrderShipped")
+        // cuando se ejecute el siguiente comando:
+        // sail artisan event:generate (Si se esta ejecutando desde docker)
+        // php artisan event:generate (Si se esta ejecutando sin docker)
+        'App\Events\OrderShipped' => [
+            'App\Listeners\SendShipmentNotification'
+        ]
     ];
 
     /**

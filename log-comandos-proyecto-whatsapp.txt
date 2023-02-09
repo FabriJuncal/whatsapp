@@ -68,3 +68,6 @@ sail artisan cache:clear
 
 // Creamos una nueva notificación para informar cuando se halla leido un mensaje
 sail artisan make:notification ReadMessage
+
+// Creamos un evento que se ejecutará cuando se conecte a un canal del servidor de WebSocket o Pusher
+sail artisan event:generate

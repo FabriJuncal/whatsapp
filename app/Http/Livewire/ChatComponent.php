@@ -26,9 +26,10 @@ class ChatComponent extends Component
         $this->users = collect();
     }
     // =================================================================================================================================================
-    /* OYENTES */
+    /* OYENTES DE LIVEWIERE*/
+    // Doc: https://laravel-livewire.com/docs/2.x/events#event-listeners
 
-    // Este método se utiliza para escuchar en un canales especifico emitido por Pusher.
+    // Este método se utiliza para escuchar en un canales especifico emitido por Pusher o Laravel Web Socket.
     // Para escuchar una lista de canales se debe retornar un array con los nombres de los canales y
     // los eventos que se van a ejecutar cuando se conecten a dicho canal.
     public function getListeners()
@@ -37,7 +38,7 @@ class ChatComponent extends Component
         $user_id = auth()->user()->id;
 
         // Retornamos un array donde:
-        // 1er Parametro / Key del Array => Es el canal de Pusher por el cual se va a escuchar.
+        // 1er Parametro / Key del Array => Es el canal de Pusher o Laravel WebSocket por el cual se va a escuchar.
         //                                  (Se concatena la variable "$user_id" para hacerlo dinamico para cada usuario logeado)
         // 2do Parametro / Value del Array => Es el método que se va a ejecutar cada vez que se reciba una notificación a travez del
         //                                    canal especificado en el 1er Parametro/Key del array.
@@ -46,8 +47,11 @@ class ChatComponent extends Component
        // echo-notification => es un evento en tiempo real que se activa cuando se recibe una notificación.
        // App.Models.User.{$user_id} => especifica que esta escucha es para un usuario específico, se especifica como "App.Models.User"
        //                               y se concatena con el id del usuario autenticado.
-       // notification => Indicamos a Livewire que el evento que ejecutará una transmisión será una notificación
+       // notification => Indicamos a Livewire que el evento que ejecutará una transmisión será una notificación.
+       //               Para agregar nuevos eventos se deben crear en el siguiente archivo "app\Providers\EventServiceProvider.php".
        // render => Es el método que se ejecutará luego de recibír una transmisión mediante el evento "notification"
+
+       //Doc: https://laravel-livewire.com/docs/2.x/laravel-echo
         return[
             "echo-notification:App.Models.User.{$user_id},notification" => 'render',
             "echo-presence:chat.1,here" => 'chatHere',
@@ -348,7 +352,7 @@ class ChatComponent extends Component
             // Utilizamos el Facade "Notification" para enviar la notificación a Pusher
             // 1er parametro -> ID de los usuarios a notificar
             // 2do Parametro -> Ruta y Nombre de la Clase de la notificación creada (En este caso se llama "ReadMessage")
-            Notification::send($this->getUsersNotificationsProperty(), new \App\Notifications\ReadMessage);
+            // Notification::send($this->getUsersNotificationsProperty(), new \App\Notifications\ReadMessage);
 
             // Desencadena un evento personalizado en Livewire.
             // Esto significa que cuando se ejecuta esta línea de código, Livewire detecta el evento "scrollIntoView" y

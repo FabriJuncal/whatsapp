@@ -62,7 +62,7 @@ class UserTyping extends Notification implements ShouldQueue
         ];
     }
 
-    // Notifica a Pusher (La tecnología que se utiliza para notificar en tiempo real)
+    // Notifica a Pusher o Laravel WebSocket (La tecnología que se utiliza para notificar en tiempo real)
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
