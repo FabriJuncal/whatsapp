@@ -251,8 +251,8 @@
                     // Se ejecuta al inicializarse el componente de Livewire
                     init(){
                         // Echo.private: Esto configura un canal privado usando la biblioteca de Echo y escucha las notificaciones enviadas al canal especificado.
-                        //  En este caso el canal se encuentra en el servidor de Pusher y se concatena el ID del usuario autenticado, ya que en este se enviarán las notifiaciones
-                        // relacionadas a este usuario. El canal en Pusher se ve así: "App.Models.User.11"
+                        //  En este caso el canal se encuentra en el servidor de Pusher / Websocket y se concatena el ID del usuario autenticado, ya que en este se enviarán las notifiaciones
+                        // relacionadas a este usuario. El canal en Pusher / Websocket se ve así: "App.Models.User.11"
                         Echo.private('App.Models.User.' + {{ auth()->id() }})
                             .notification((notification) => {
                                 // Validamos que la notificación recibida sea halla ejecuado desde la notificación "UserTyping"
@@ -272,9 +272,9 @@
             }
 
 
-            // Escucha el evento "scrollIntoView" con en Livewire.
+            // Escucha el evento "scrollIntoView" con Livewire.
             // Cuando se desencadene el evento "scrollIntoView" en algún lugar de la aplicación, la función se activa.
-            // Por ejemplo en el archivo "app\Http\Livewire\ChatComponent.php" ejecuta la función para desencadenar el evento:
+            // Por ejemplo en el archivo "app\Http\Livewire\ChatComponent.php" ejecuta la función para desencadenar el evento con:
 
             // $this->emit('scrollIntoView');
 

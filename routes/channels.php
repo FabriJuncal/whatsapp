@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Broadcast;
 | Aquí podrá registrar todos los canales de transmisión de eventos que soporta su aplicación.
 | Las devoluciones de llamada de autorización de canal dadas se utilizan para verificar si un
 | usuario autenticado puede escuchar el canal.
+| Aquí se autorizan a los usuarios para los canales de tipo "Presence" y "Private".
 |
 */
 

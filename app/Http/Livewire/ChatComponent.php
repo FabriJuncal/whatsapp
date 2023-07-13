@@ -44,6 +44,13 @@ class ChatComponent extends Component
         //                                    canal especificado en el 1er Parametro/Key del array.
 
        // Mas detalles:
+       // Sintaxis Especial: ['echo:{channel},{event}' => '{method}']
+
+       // Tipo de Canales:
+       // - Public: No requiere autenticación
+       // - Presence: Requiere autenticación, y todos los usuarios autenticados pueden escuchar el canal (Especial para salas de chat)
+       // - Private: Requiere autenticación, solo puede escuchar el canal los usuarios conectados, pero nadie conoce la información de nadie.
+
        // echo-notification => es un evento en tiempo real que se activa cuando se recibe una notificación.
        // App.Models.User.{$user_id} => especifica que esta escucha es para un usuario específico, se especifica como "App.Models.User"
        //                               y se concatena con el id del usuario autenticado.
@@ -311,7 +318,7 @@ class ChatComponent extends Component
     }
 
     // Función que se ejecuta en el momento que nos encontremos ubicados en la página chat
-    // $users => Obtendrá los datos del usuario retornado en el archivo "routes\channels.php"
+    // $users => Obtendrá los datos del usuario retornado en el archivo "routes\channels.php" del Broadcast 'chat.{id}'
     // en el canal con el nombre "chat.1" de tipo "presence"
     public function chatHere($users)
     {
@@ -319,7 +326,7 @@ class ChatComponent extends Component
     }
 
     // Función que se ejecuta en el momento que ingresa un nuevo usuario a la página chat
-    // $user => Obtendrá los datos del usuario retornado en el archivo "routes\channels.php"
+    // $users => Obtendrá los datos del usuario retornado en el archivo "routes\channels.php" del Broadcast 'chat.{id}'
     // en el canal con el nombre "chat.1" de tipo "presence"
     public function chatJoining($user)
     {
@@ -328,7 +335,7 @@ class ChatComponent extends Component
     }
 
     // Función que se ejecuta en el momento que un usuario sale de la página chat
-    // $user => Obtendrá los datos del usuario retornado en el archivo "routes\channels.php"
+    // $users => Obtendrá los datos del usuario retornado en el archivo "routes\channels.php" del Broadcast 'chat.{id}'
     // en el canal con el nombre "chat.1" de tipo "presence"
     public function chatLeaving($user)
     {
