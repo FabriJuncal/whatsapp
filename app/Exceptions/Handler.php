@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -43,8 +44,19 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        //  el método "renderable" se utiliza para personalizar el manejo de la excepción NotFoundHttpException.
+        $this->renderable(function (NotFoundHttpException $e, $request) {
+            // Se verifica si la solicitud coincide con ciertas rutas relacionadas.
+            // Si la solicitud coincide con alguna de estas rutas, entonces se envía una respuesta JSON con un código
+            // de estado HTTP 404 (Not Found) y un mensaje de error específico
+
+            // Excepción para los departamentos no encontrados.
+            if($request->is('api/contacts/*')){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Contacto invalido'
+                ], 404);
+            }
         });
     }
 }
