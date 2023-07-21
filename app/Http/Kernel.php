@@ -39,7 +39,9 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            // Se descomenta esta linea para utilizar el middleware proporcionado por Laravel Sanctum,
+            // un paquete de autenticación que permite implementar autenticación de tokens para aplicaciones SPA (Single Page Application) o frontends.
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],

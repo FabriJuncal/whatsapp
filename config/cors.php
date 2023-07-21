@@ -28,7 +28,8 @@ return [
     'exposed_headers' => [],
 
     'max_age' => 0,
-
-    'supports_credentials' => false,
+    // Se determina que se deben permitir credenciales (como cookies, HTTP authentication o certificados)
+    // en las solicitudes de origen cruzado (CORS).
+    'supports_credentials' => true,
 
 ];
