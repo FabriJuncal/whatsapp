@@ -71,3 +71,10 @@ sail artisan make:notification ReadMessage
 
 // Creamos un evento que se ejecutará cuando se conecte a un canal del servidor de WebSocket o Pusher
 sail artisan event:generate
+
+============================================================================================================================
+
+/* Comandos que se ejecutaron para desarrollar la API */
+
+// Creamos un nuevo Controllador de Contactos que ejecutará la API
+sail artisan make:controller ContactApiController -r

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ContactApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,6 @@ Route::post('auth/login',[AuthController::class, 'login']);
 // Se utiliza el "middleware" de Sanctum para proteger las rutas.
 // Se necesitará el API TOKEN para poder acceder a las rutas protegidas por el middleware de Sanctum.
 Route::middleware(['auth:sanctum'])->group(function(){
-
+    Route::resource('contacts', ContactApiController::class);
 });
 
