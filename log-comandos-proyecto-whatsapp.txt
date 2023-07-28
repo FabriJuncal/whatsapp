@@ -81,3 +81,6 @@ sail artisan make:controller ContactApiController -r
 
 // Creamos un nuevo Controllador de Chats que ejecutará la API
 sail artisan make:controller ChatApiController -r
+
+// Creamos un nuevo Controllador de Mensajes de los Chats que ejecutará la API
+sail artisan make:controller MessageApiController -r

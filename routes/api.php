@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatApiController;
 use App\Http\Controllers\ContactApiController;
+use App\Http\Controllers\MessageApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -40,5 +41,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // Obtener todos los chats del usuario autenticado.
     // Al tener el método __invoke en la classe ChatApiController, podemos hacer uso de esta sintaxis, ya que siempre se va a ejecutar el método __invoke
     Route::get('/chats', ChatApiController::class);
+
+    // Rutas para las acciones de los mensajes del chat.
+    // Obtener todos los mensajes de un chat específico.
+    Route::get('/chats/{chat}/messages', [MessageApiController::class, 'index']);
+    // Enviar un nuevo mensaje a un chat específico.
+    Route::post('/chats/{chat}/messages', [MessageApiController::class, 'store']);
 });
 
