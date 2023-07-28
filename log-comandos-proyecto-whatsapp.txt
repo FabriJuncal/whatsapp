@@ -78,3 +78,6 @@ sail artisan event:generate
 
 // Creamos un nuevo Controllador de Contactos que ejecutará la API
 sail artisan make:controller ContactApiController -r
+
+// Creamos un nuevo Controllador de Chats que ejecutará la API
+sail artisan make:controller ChatApiController -r
