@@ -15,7 +15,9 @@ class ChatApiController extends Controller
     // __invoke => Método que se ejecuta cuando se invoca la clase
     public function __invoke()
     {
-        $chats = auth()->user()->chats()->paginate();
+        // Obtiene los todos los chats que tengan almenos 1 mensaje.
+        // $chats = auth()->user()->chats()->has('messages')->get();
+        $chats = auth()->user()->chats()->has('messages')->get();
         return response()->json($chats);
     }
 }
